@@ -63,7 +63,6 @@ class PyiCloudSession(Session):
         super().__init__()
 
     def request(self, method, url, **kwargs):  # pylint: disable=arguments-differ
-
         # Charge logging to the right service endpoint
         callee = inspect.stack()[2]
         module = inspect.getmodule(callee[0])
@@ -587,7 +586,11 @@ class PyiCloudService:
     def reminders(self):
         """Gets the 'Reminders' service."""
         service_root = self._get_webservice_url("reminders")
-        return RemindersService(service_root, self.session, self.params)
+        return RemindersService(
+            service_root,
+            self.session,
+            {"dsid": self.data.get("dsInfo", {}).get("dsid", "")},
+        )
 
     @property
     def drive(self):
